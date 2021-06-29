@@ -176,6 +176,18 @@ def delete_task(task_id):
 		"message": "This is the last time you see it! :((("
 		}), 200
 
+@app.route('/api/tasks/items/<int:task_item_id>', methods=['DELETE'])
+def delete_task_item(task_item_id):
+	task_item = db.session.query(TaskItem).filter(TaskItem.id == task_item_id).scalar()
+	if task_item is None:
+		return jsonify({"error":"Not exists"}), 400
+	db.session.delete(task_item)
+	db.session.commit()
+	return jsonify({
+		**task_item.to_dict(),
+		"message": "This is the last time you see it! :((("
+		}), 200
+
 @app.route('/api/tasks/excel', methods=['GET'])
 def create_excel():
 	wb = Workbook()
